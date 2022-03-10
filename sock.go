@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"log"
 	"net"
 	"os"
@@ -11,7 +10,20 @@ const SockAddr = "C:\\tmp\\socktest.sock"
 
 func echoServer(c net.Conn) {
 	log.Printf("Client connected [%s]", c.RemoteAddr().Network())
-	io.Copy(c, c)
+
+	buf := make([]byte, 512)
+	nr, err := c.Read(buf)
+	if err != nil {
+		return
+	}
+
+	data := buf[0:nr]
+	println("Server got:", string(data))
+	_, err = c.Write(data)
+	if err != nil {
+		log.Fatal("Write: ", err)
+	}
+
 	c.Close()
 }
 
