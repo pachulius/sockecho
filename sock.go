@@ -24,7 +24,7 @@ func echoServer(c net.Conn) {
 	data := buf[0:nr]
 	println("Server got:", string(data))
 
-	ps1("test.ps1")
+	go ps1(string(data))
 
 	_, err = c.Write(data)
 	if err != nil {
@@ -37,7 +37,7 @@ func echoServer(c net.Conn) {
 func ps1(scriptName string) {
 	path := wkd + "\\" + scriptName
 	log.Print(path)
-	cmd := exec.Command("C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "-file", "C:\\git\\sockecho\\test.ps1", "-state", "dev")
+	cmd := exec.Command("C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "-file", path)
 	//cmd := exec.Command("C:\\Users\\George\\Downloads\\npcap-1.60.exe")
 
 	//cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
